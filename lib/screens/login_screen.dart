@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
-import 'home_screen.dart';
+import 'bluetooth_connection_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isSignUp;
@@ -36,7 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(
+              builder: (context) => const BluetoothConnectionScreen()),
         );
       }
     }
