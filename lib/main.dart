@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/splash_screen.dart';
-import 'services/bluetooth_service.dart';
+import 'services/bluetooth_service.dart' show BluetoothManager;
 import 'services/google_sheets_service.dart';
 import 'services/data_service.dart';
+import 'config/app_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +31,15 @@ class OralNovaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => BluetoothService()),
-        ChangeNotifierProvider(create: (_) => GoogleSheetsService()),
+        ChangeNotifierProvider(create: (_) => BluetoothManager()),
+        ChangeNotifierProvider(
+          create: (_) {
+            final service = GoogleSheetsService();
+            // Initialize with spreadsheet ID from config
+            service.initialize(AppConfig.googleSheetsSpreadsheetId);
+            return service;
+          },
+        ),
         ChangeNotifierProvider(create: (_) => DataService()),
       ],
       child: MaterialApp(
