@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_constants.dart';
 import '../models/patient.dart';
-import '../services/bluetooth_service.dart';
+import '../services/bluetooth_service.dart' show BluetoothManager, SensorType;
 import '../services/data_service.dart';
 import '../services/google_sheets_service.dart';
 import '../widgets/exercise_widget.dart';
@@ -35,7 +35,7 @@ class _BitePressureExerciseScreenState
       sensorType: SensorType.biteForce,
       mascotImage: _buildMascot(),
       onGetReading: () async {
-        final bluetoothService = context.read<BluetoothService>();
+        final bluetoothService = context.read<BluetoothManager>();
         final reading =
             bluetoothService.getCurrentReading(SensorType.biteForce);
 

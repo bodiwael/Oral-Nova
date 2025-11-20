@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as ble;
 import 'package:permission_handler/permission_handler.dart';
 import '../constants/app_constants.dart';
 
 enum SensorType { flowRate, biteForce, tongue }
 
-class BluetoothService extends ChangeNotifier {
-  BluetoothDevice? flowRateDevice;
-  BluetoothDevice? biteForceDevice;
-  BluetoothDevice? tongueDevice;
+class BluetoothManager extends ChangeNotifier {
+  ble.BluetoothDevice? flowRateDevice;
+  ble.BluetoothDevice? biteForceDevice;
+  ble.BluetoothDevice? tongueDevice;
 
-  BluetoothCharacteristic? flowRateCharacteristic;
-  BluetoothCharacteristic? biteForceCharacteristic;
-  BluetoothCharacteristic? tongueCharacteristic;
+  ble.BluetoothCharacteristic? flowRateCharacteristic;
+  ble.BluetoothCharacteristic? biteForceCharacteristic;
+  ble.BluetoothCharacteristic? tongueCharacteristic;
 
   double currentFlowRateInhale = 0.0;
   double currentFlowRateExhale = 0.0;
@@ -49,10 +49,10 @@ class BluetoothService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
+      await ble.FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
 
-      FlutterBluePlus.scanResults.listen((results) {
-        for (ScanResult result in results) {
+      ble.FlutterBluePlus.scanResults.listen((results) {
+        for (ble.ScanResult result in results) {
           String deviceName = result.device.platformName;
 
           // Identify devices by name (update these to match your ESP32 names)
@@ -77,7 +77,7 @@ class BluetoothService extends ChangeNotifier {
   }
 
   Future<void> connectToDevice(SensorType type) async {
-    BluetoothDevice? device;
+    ble.BluetoothDevice? device;
 
     switch (type) {
       case SensorType.flowRate:
@@ -95,12 +95,12 @@ class BluetoothService extends ChangeNotifier {
 
     try {
       await device.connect();
-      List<BluetoothService> services = await device.discoverServices();
+      List<ble.BluetoothService> services = await device.discoverServices();
 
-      for (BluetoothService service in services) {
+      for (ble.BluetoothService service in services) {
         if (type == SensorType.flowRate &&
             service.uuid.toString() == AppConstants.flowRateServiceUUID) {
-          for (BluetoothCharacteristic char in service.characteristics) {
+          for (ble.BluetoothCharacteristic char in service.characteristics) {
             if (char.uuid.toString() == AppConstants.flowRateCharUUID) {
               flowRateCharacteristic = char;
               await char.setNotifyValue(true);
@@ -111,7 +111,7 @@ class BluetoothService extends ChangeNotifier {
           }
         } else if (type == SensorType.biteForce &&
             service.uuid.toString() == AppConstants.biteForceServiceUUID) {
-          for (BluetoothCharacteristic char in service.characteristics) {
+          for (ble.BluetoothCharacteristic char in service.characteristics) {
             if (char.uuid.toString() == AppConstants.biteForceCharUUID) {
               biteForceCharacteristic = char;
               await char.setNotifyValue(true);
@@ -122,7 +122,7 @@ class BluetoothService extends ChangeNotifier {
           }
         } else if (type == SensorType.tongue &&
             service.uuid.toString() == AppConstants.tongueServiceUUID) {
-          for (BluetoothCharacteristic char in service.characteristics) {
+          for (ble.BluetoothCharacteristic char in service.characteristics) {
             if (char.uuid.toString() == AppConstants.tongueCharUUID) {
               tongueCharacteristic = char;
               await char.setNotifyValue(true);
