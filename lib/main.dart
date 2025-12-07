@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'constants/app_constants.dart';
 import 'screens/splash_screen.dart';
 import 'services/bluetooth_service.dart';
 import 'services/google_sheets_service.dart';
@@ -40,22 +41,30 @@ class OralNovaApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF2E5C9A),
-            primary: const Color(0xFF2E5C9A),
-            secondary: const Color(0xFF87CEEB),
-            surface: Colors.white,
+            seedColor: AppConstants.primaryBlue,
+            primary: AppConstants.primaryBlue,
+            secondary: AppConstants.accentPurple,
+            surface: AppConstants.surfaceWhite,
+            background: AppConstants.backgroundColor,
           ),
-          textTheme: GoogleFonts.poppinsTextTheme(),
+          scaffoldBackgroundColor: AppConstants.backgroundColor,
+          textTheme: GoogleFonts.poppinsTextTheme(
+            ThemeData.light().textTheme.apply(
+                  bodyColor: AppConstants.deepBlue,
+                  displayColor: AppConstants.deepBlue,
+                ),
+          ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2E5C9A),
+              backgroundColor: AppConstants.primaryBlue,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(25),
               ),
-              elevation: 3,
-              textStyle: const TextStyle(
+              elevation: 5,
+              shadowColor: AppConstants.primaryBlue.withOpacity(0.3),
+              textStyle: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
@@ -63,19 +72,37 @@ class OralNovaApp extends StatelessWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppConstants.cardBackground,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                color: AppConstants.lightBlue.withOpacity(0.3),
+                width: 1,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(color: Color(0xFF2E5C9A), width: 2),
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                color: AppConstants.primaryBlue,
+                width: 2.5,
+              ),
             ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
+            ),
+          ),
+          cardTheme: CardTheme(
+            elevation: 5,
+            shadowColor: AppConstants.primaryBlue.withOpacity(0.1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: AppConstants.surfaceWhite,
           ),
         ),
         home: const SplashScreen(),
